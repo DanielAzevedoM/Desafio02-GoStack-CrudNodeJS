@@ -70,13 +70,15 @@ app.put("/repositories/:id", idIsUuid, (request, response) => {
 app.delete("/repositories/:id", idIsUuid, (request, response) => {
   const { id } = request.params;
 
-  const repositoryId = repositories.find(repository => repository.id === id)
+  const repositoryIndex = repositories.findIndex(repository => repository.id === id)
 
-  if(!repositoryId){
-    return response.status(401).json({ error: "Repository not found"})
+  if(repositoryIndex === -1){
+    return response.json({ error: "Repository index not found"})
   }
 
-  repositories.splice(repositoryId, 1)
+  if(repositoryIndex >= 0){
+    repositories.splice(repositoryIndex, 1)
+  }
 
   return response.status(204).send()
 
@@ -85,16 +87,15 @@ app.delete("/repositories/:id", idIsUuid, (request, response) => {
 app.post("/repositories/:id/like", idIsUuid, (request, response) => {
   const { id } = request.params;
 
-  const findRepository = repositories.find(repository => repository.id === id)
+  const repositoryIndex = repositories.findIndex(repository => repository.id === id)
 
-  if(!findRepository){
-    return resquest.status(401).json({ error: "Repository not found"})
+  if(repositoryIndex === -1){
+    return response.json({ error: "Repository index not found"})
   }
 
-  findRepository.likes++
-  
+  repositories[repositoryIndex].likes++
 
-  return response.json({ findRepository })
+  return response.json(repositories[repositoryIndex])
 
 });
 
