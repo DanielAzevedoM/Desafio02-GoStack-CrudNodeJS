@@ -91,14 +91,10 @@ app.post("/repositories/:id/like", idIsUuid, (request, response) => {
     return resquest.status(401).json({ error: "Repository not found"})
   }
 
-  const repository = {
-    ...findRepository,
-    likes: findRepository.likes++
-  }
-
+  findRepository.likes++
   
 
-  return response.json({ repository })
+  return response.json({ findRepository })
 
 });
 
